@@ -20,14 +20,15 @@ impl bindgen::callbacks::ParseCallbacks for IgnoreMacros {
 
 fn main() {
     // Tell cargo to look for shared libraries in the specified directory
-    // println!("cargo:rustc-link-search=/path/to/lib");
+    // println!("cargo:rustc-link-search=/class_public/build/lib");
+    // println!("cargo:rustc-link-search={}={}", "native", "/class_public/");
 
     // Tell cargo to tell rustc to link the system bzip2
     // shared library.
-    // println!("cargo:rustc-link-lib=bz2");
+    // println!("cargo:rustc-link-lib={}={}", "static", "class");
 
     // Tell cargo to invalidate the built crate whenever the wrapper changes
-    println!("cargo:rerun-if-changed='wrapper.h'");
+    println!("cargo:rerun-if-changed=wrapper.h");
 
     let ignored_macros = IgnoreMacros(
         vec![
@@ -51,9 +52,9 @@ fn main() {
         .header("wrapper.h")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        // .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .parse_callbacks(Box::new(ignored_macros))
-            .rustfmt_bindings(true)
+            // .rustfmt_bindings(true)
         // Finish the builder and generate the bindings.
         .generate()
         // Unwrap the Result and panic on failure.
